@@ -1,0 +1,94 @@
+{% extends 'base.html' %} {% load static %} {%block content %}
+<!-- HOME -->
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title">
+      <div class="breadcrumbs">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#"><i class="bi bi-house"></i> Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Category</a></li>
+            <li class="breadcrumb-item active current">About</li>
+          </ol>
+        </nav>
+      </div>
+
+      <div class="title-wrapper">
+        <h1>À propos de la GAE</h1>
+        <p>La Génération Auto-Entrepreneur est une initiative visant à accompagner les entrepreneurs et les professionnels dans leur développement. Nous offrons un espace d’échange, de partage et d’accompagnement pour vous aider à relever les défis du monde des affaires au Congo et partout ailleurs. Notre mission est de fournir des outils, des conseils et un réseau solide pour favoriser l’innovation et la réussite de chacun.</p>
+      </div>
+    </div>
+    <!-- End Page Title -->
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <span class="section-badge"><i class="bi bi-info-circle"></i>A propos</span>
+        <div class="row">
+          <div class="col-lg-6">
+            <h2 class="about-title">MATISSA AFFAIRE</h2>
+            <p class="about-description">Nous formons et accompagnons les jeunes auto-entrepreneurs.</p>
+            <p>Nous offrons un espace d’échange, de partage et d’accompagnement pour vous aider à relever les défis du monde des affaires au Congo</p>
+          </div>
+          <div class="col-lg-6">
+            <p class="about-text">Dans le cadre de sa campagne <strong>#Matissa_Affaire</strong>, la génération auto-entrepreneur, sous la direction de son coordonnateur général, Monsieur Digne Elvis TSALISSAN OKOMBI, accompagnera les coopératives agricoles de ceinture maraîchère.</p>
+            <p class="about-text">Remise d'un chèque de soutien à hauteur de 1.000.000 FCFA, aux auto-entrepreneurs de la coopérative TERRE ET JEUNE, par le coordonnateur général de l'Association Génération Auto-Entrepreneur, Monsieur Digne Elvis TSALISSAN OKOMBI.</p>
+          </div>
+        </div>
+
+        <div class="row features-boxes gy-4 mt-3">
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="feature-box">
+              <div class="icon-box">
+                <i class="bi bi-bullseye"></i>
+              </div>
+              <h3><a href="#" class="stretched-link">Entrepreneuriat</a></h3>
+              <p>Conseils, stratégies et retours d’expérience pour les entrepreneurs.</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="feature-box">
+              <div class="icon-box">
+                <i class="bi bi-person-check"></i>
+              </div>
+              <h3><a href="#" class="stretched-link">Networking & Événements</a></h3>
+              <p>Découvrez les rencontres et événements pour booster votre réseau</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="400">
+            <div class="feature-box">
+              <div class="icon-box">
+                <i class="bi bi-clipboard-data"></i>
+              </div>
+              <h3><a href="#" class="stretched-link">Financement</a></h3>
+              <p>Accédez aux informations sur les aides financières, les levées de fonds et la gestion de trésorerie.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-lg-12" data-aos="zoom-in" data-aos-delay="200">
+            <div class="video-box">
+              <img src="{% static 'assets/img/about/1about-wide-1.jpg' %}" class="img-fluid" alt="Video Thumbnail">
+              <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox pulsating-play-btn"></a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+    <!-- /About Section -->
+
+  </main>
+
+
+{% endblock %}
+
+<!-- HOME -->
