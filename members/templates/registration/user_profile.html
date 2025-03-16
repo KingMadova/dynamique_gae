@@ -18,7 +18,7 @@
       </div>
 
       <div class="title-wrapper">
-        <h1>PROFIL DE L'AUTEUR</h1>
+        <h1>{{ page_user.user.first_name }} {{ page_user.user.last_name }}</h1>
         <p>{{ page_user.bio }}</p>
       </div>
     </div><!-- End Page Title -->
@@ -44,10 +44,10 @@
 
                 <div class="author-info">
                   <h2>{{ page_user.user.first_name }} {{ page_user.user.last_name }}</h2>
-                  <p class="designation">Senior Technology Writer</p>
+                  <p class="designation">Senior Community Manager</p>
 
                   <div class="author-bio">
-                    Through my articles, I explore the intersection of technology and society, focusing on how emerging tech shapes our daily lives and future possibilities.
+                    {{ page_user.bio }}
                   </div>
                   <div class="social-links">
                     <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
@@ -116,6 +116,7 @@
                       </div>
                     </div>
                   </div> -->
+                
                 </div>
               </div>
             </div>

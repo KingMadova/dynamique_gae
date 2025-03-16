@@ -12,7 +12,7 @@ for item in choices:
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('title', 'title_tag', 'header_image', 'author', 'category', 'body', 'snippet')
+        fields = ('title', 'title_tag', 'header_image', 'author', 'category', 'body', 'snippet', 'Main_Post')
         
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
@@ -42,8 +42,29 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ('name', 'body',)
-        
+
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'body': forms.Textarea(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your full name',
+                'id': 'name'
+            }),
+            'body': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Write your thoughts here...',
+                'rows': '5',
+                'id': 'comment'
+            }),
         }
+
+
+
+# class CommentForm(forms.ModelForm):
+#     class Meta:
+#         model = Comment
+#         fields = ('name', 'body',)
+        
+#         widgets = {
+#             'name': forms.TextInput(attrs={'class': 'form-control'}),
+#             'body': forms.Textarea(attrs={'class': 'form-control'}),
+#         }

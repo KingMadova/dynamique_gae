@@ -27,6 +27,7 @@
 
   <!-- Main CSS File -->
   <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
 </head>
 <body class="index-page">
     <!-- HEADER -->
@@ -44,12 +45,11 @@
               <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
               <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
             </div>
-            <!-- <form class="search-form ms-4">
-              <input type="text" placeholder="Search..." class="form-control" />
-              <button type="submit" class="btn">
-                <i class="bi bi-search"></i>
-              </button>
-            </form> -->
+            <form action="{% url 'search_articles' %}" method="GET" class="search-form ms-4">
+              <input type="text" name="q" placeholder="Search..." class="form-control">
+              <button type="submit" class="btn"><i class="bi bi-search"></i></button>
+          </form>
+            </form>
           </div>
         </div>
       </div>
@@ -57,55 +57,47 @@
       <div class="nav-wrap">
         <div class="container d-flex justify-content-center position-relative">
           <nav id="navmenu" class="navmenu">
-              <ul>
-                <li><a href="{% url 'home' %}" class="active">Home</a></li>
-                <li><a href="{% url 'about' %}">About</a></li>
-                {% if user.is_authenticated %}
-                <li>
-                  <a href="{% url 'contact' %}">Contact</a>
-                </li>
+    <ul>
+        <li><a href="{% url 'home' %}" class="#">Accueil</a></li>
+        <li><a href="{% url 'about' %}">A propos</a></li>
+        <li><a href="{% url 'contact' %}">Contact</a></li>
+
+        {% if user.is_authenticated %}
+        <li class="dropdown">
+            <a href="#">
+                <span>{{ user.first_name }} {{ user.last_name }}</span>
+                <i class="bi bi-chevron-down toggle-dropdown"></i>
+            </a>
+            <ul>
+                <li><a href="{% url 'edit_profile' %}"><i class="bi bi-gear"></i> Modifier les paramètres du profil</a></li>
+                {% if user.profile.id %}
+                <li><a href="{% url 'edit_profile_page' user.profile.id %}"><i class="bi bi-person-bounding-box"></i> Modifier le profil</a></li>
+                <li><a href="{% url 'show_profile_page' user.profile.id %}"><i class="bi bi-person"></i> Voir le profil</a></li>
                 {% else %}
-                <li>
-                  <a href="{% url 'register' %}">Register</a>
-                </li>
-                <li>
-                  <a href="{% url 'login' %}">Login</a>
-                </li>
-              </ul>
+                <li><a href="{% url 'create_profile_page' %}"><i class="bi bi-person-plus"></i> Créer un profil</a></li>
                 {% endif %}
-              {% if user.is_authenticated %}
-              <ul>
-                <li class="dropdown">
-                  <a href="#">
-                    <span>{{ user.first_name }} {{ user.last_name }}</span>
-                     <i class="bi bi-chevron-down toggle-dropdown"></i>
-                   </a>
-                  <ul>
-                    <li><a href="{% url 'edit_profile' %}"><i class="bi bi-gear"></i> Edit Setting</a></li>
-                    {% if user.profile.id %}
-                    <li><a href="{% url 'edit_profile_page' user.profile.id %}"><i class="bi bi-person-bounding-box"></i> Edit Profile Page</a></li>
-                    <li><a href="{% url 'show_profile_page' user.profile.id %}"><i class="bi bi-person"></i> Show Profile Page</a></li>
-                    {% else %}
-                    <li><a href="{% url 'create_profile_page' %}"><i class="bi bi-person-plus"></i> Create Profile Page</a></li>
-                    {% endif %}
-                    <li><a href="{% url 'add_category' %}"><i class="bi bi-folder-plus"></i> Add Category</a></li>
-                    <li><a href="{% url 'add_post' %}"><i class="bi bi-file-earmark-plus"></i> Add Post</a></li>
-                    <li>
-                      <a>
-                      <form action="{% url 'logout' %}" method="POST" style="display: inline">
-                      {% csrf_token %}
-                      <button type="submit" class="btn btn-secondary" style="cursor: pointer">
-                        Logout
-                      </button>
+                {% if request.user.is_superuser %}
+                <li><a href="{% url 'add_category' %}"><i class="bi bi-folder-plus"></i> Ajouter une catégorie</a></li>
+                <li><a href="{% url 'add_post' %}"><i class="bi bi-file-earmark-plus"></i> Ajouter un article</a></li>
+                {% endif %}
+                <li>
+                    <form action="{% url 'logout' %}" method="POST" style="display: inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-secondary text-center" style="cursor: pointer">
+                            Logout
+                        </button>
                     </form>
-                    </a>
-                    </li>
-                  </ul>
-                </li>             
-              </ul>
-              {% endif %}
-              <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>  
-          </nav>
+                </li>
+            </ul>
+        </li>    
+        {% else %}
+        <li><a href="{% url 'register' %}">S'enregistrer</a></li>
+        <li><a href="{% url 'login' %}">Se connecter</a></li>
+        {% endif %}
+    </ul>
+    <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>  
+</nav>
+
         </div>
       </div>
     </header>
@@ -149,13 +141,13 @@
             <h4>Liens Rapides</h4>
             <ul>
               <li><a href="{% url 'home' %}">Accueil</a></li>
-              <li><a href="#">A Propos de Nous</a></li>
-              <li><a href="#">Nos Réalisations</a></li>
+              <li><a href="{% url 'about' %}">A Propos de Nous</a></li>
+              <li><a href="{% url 'contact' %}">Nous contactez</a></li>
             </ul>
           </div>
 
           <div class="col-lg-2 col-md-3 footer-links">
-            <h4>Nos Services</h4>
+            <h4>Nos Réalisations</h4>
             <ul>
               <li><a href="#">Web Design</a></li>
               <li><a href="#">Web Development</a></li>
@@ -166,26 +158,16 @@
           </div>
 
           <div class="col-lg-2 col-md-3 footer-links">
-            <h4>Hic solutasetp</h4>
+            <h4>Quelques Lieux</h4>
             <ul>
-              <li><a href="#">Molestiae accusamus iure</a></li>
-              <li><a href="#">Excepturi dignissimos</a></li>
-              <li><a href="#">Suscipit distinctio</a></li>
-              <li><a href="#">Dilecta</a></li>
-              <li><a href="#">Sit quas consectetur</a></li>
+              <li><a href="#">Brazzaville</a></li>
+              <li><a href="#">Pointe-Noire</a></li>
+              <li><a href="#">Dolisie</a></li>
+              <li><a href="#">Owando</a></li>
             </ul>
           </div>
 
-          <div class="col-lg-2 col-md-3 footer-links">
-            <h4>Nobis illum</h4>
-            <ul>
-              <li><a href="#">Ipsam</a></li>
-              <li><a href="#">Laudantium dolorum</a></li>
-              <li><a href="#">Dinera</a></li>
-              <li><a href="#">Trodelas</a></li>
-              <li><a href="#">Flexo</a></li>
-            </ul>
-          </div>
+         
         </div>
       </div>
 

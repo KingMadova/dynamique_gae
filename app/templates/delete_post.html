@@ -1,31 +1,58 @@
-{% extends 'base.html' %} {% block title %} Delete Blog Post ! {% endblock %} 
+{% extends 'base.html' %} {% block title %} Suppression {% endblock %} 
 {% block content %} 
-{% if user.is_authenticated %}
-  {% if user.id == post.author.id %}
 
-    <h1>Delete Post...</h1>
-    <br /><br />
-    <h3>Delete: {{ post.title }}</h3>
-    <br />
-    <div class="form-group">
-      <form method="POST">
-        {% csrf_token %}
-        <strong>Are you sure ?!</strong> <br /><br />
-        <hr />
-        <button class="btn" style="background-color: red; color: white">
-          Delete Post !
-        </button>
-        <a href="{% url 'home' %}" class="btn btn-primary">Cancelled</a>
-      </form>
-    </div>
-    {% else %}
-      <br />
-      You're not allowed here ! (and you know it...)  
-    {% endif %} 
+
+{% if user.is_authenticated %} {% if user.id == post.author.id %}
+<section id="blog-comment-form" class="blog-comment-form section">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <form method="POST" role="form">
+      
+      {% csrf_token %}
+      <div class="section-header">
+        <h3>Supprimer l'article</h3>
+      </div>
+      <div class="row gy-3">
+        <div class="text-center">
+          <div class="error-icon mb-4" data-aos="zoom-in" data-aos-delay="200">
+            <i class="bi bi-exclamation-circle"></i>
+          </div>
+
+          <h2 class="error-title mb-3" data-aos="fade-up" data-aos-delay="400">
+            Voulez-vous vraiment supprimer cet article ?
+          </h2>
+          <p class="loading">L'action est irréversible !</p>
+        </div>
+
+        <div class="col-12 text-center">
+          <button class="btn-submit">Supprimez</button>
+          <a href="{% url 'home' %}" class="btn-submit">Annulez</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
 {% else %}
 <br />
-You're not allowed here ! (and you know it...)
+<div class="text-center">
+  <div class="error-icon mb-4" data-aos="zoom-in" data-aos-delay="200">
+    <i class="bi bi-exclamation-circle"></i>
+  </div>
 
-{% endif %} 
+  <h2 class="error-title mb-3" data-aos="fade-up" data-aos-delay="400">
+    Vous n'êtes pas autorisé à être ici ! (et vous le savez...)
+  </h2>
+</div>
 
-{% endblock %}
+{% endif %} {% else %}
+<br />
+<div class="text-center">
+  <div class="error-icon mb-4" data-aos="zoom-in" data-aos-delay="200">
+    <i class="bi bi-exclamation-circle"></i>
+  </div>
+
+  <h2 class="error-title mb-3" data-aos="fade-up" data-aos-delay="400">
+    Vous n'êtes pas autorisé à être ici ! (et vous le savez...)
+  </h2>
+</div>
+
+{% endif %} {% endblock %}

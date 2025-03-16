@@ -1,20 +1,51 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
+from django.db.models import Q
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse, reverse_lazy 
-from django.http import HttpResponseRedirect
+from django.http import HttpRequest, HttpResponseRedirect
+from django.core.mail import send_mail
 
 from .models import Category, Post, Comment
-from .forms import PostForm, EditForm, CommentForm
+from .forms import EditForm, PostForm
+
+from django.contrib.auth.decorators import login_required
 
 
-# def home(request):
-#     return render(request, 'home.html', {})
 
 def contact(request):
+    if request.method == 'POST':
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        phone = request.POST.get("phone")
+        service = request.POST.get("service")
+        message = request.POST.get("message")
+        
+        subject = f"Message de {name}"
+        body = f"""
+            Nom : {name}
+            Email : {email}
+            Téléphone : {phone}
+            Service : {service}
+            Message : {message}
+        
+        """
+        send_mail(subject, body, email, ['gae@gmail.com'])
+        
+        return redirect(reverse('confirmation') + f'?name={name}&email={email}')
     return render(request, 'contact.html')
 
-# def artacle(request):
-#     return render(request, 'article_details.html')
+
+
+def confirmation_view(request : HttpRequest):
+    name = request.GET.get('name')
+    email = request.GET.get('email')
+    
+    context = {'name': name, 'email': email}
+    return render(request, 'confirmation.html', context)
+
+# FORMULAIRE DE CONTACT
+
 
 def about(request):
     return render(request, 'about.html')
@@ -59,7 +90,6 @@ class HomeView(ListView):
         return context
 
 
-
 def CategoryListView(request):
     cat_menu_list = Category.objects.all()
     return render(request, 'category_list.html', {'cat_menu_list':cat_menu_list})
@@ -90,27 +120,75 @@ class ArticleDetailView(DetailView):
         context["liked"] = liked
         
         return context
+    
+def article_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    
+        # Récupérer les 5 derniers articles publiés
+    small_cat = Post.objects.filter(status='1').order_by('-post_date')[:5]
+    
+    return render(request, 'article_detail.html', {'post': post, 'small_cat': small_cat})
 
-class AddPostView(CreateView):
+
+def search_articles(request):
+    query = request.GET.get('q')  # Récupère le texte de recherche
+    results = []
+
+    if query:
+        results = Post.objects.filter(
+            Q(title__icontains=query) | Q(category__icontains=query), status='1'
+        ).distinct()  # Recherche par titre ou catégorie
+
+    return render(request, 'search_results.html', {'query': query, 'results': results})
+
+
+
+
+
+class AddPostView(LoginRequiredMixin, CreateView):
     model = Post
-    # form_class = PostForm
     template_name = 'add_post.html'  
-    fields = '__all__'
-    # fields = ('title', 'title_tag', 'header_image',  'body', 'category', 'snippet', 'section', 'status')
+    fields = ('title', 'title_tag', 'header_image', 'body', 'category', 'snippet', 'section', 'status','Main_Post')
+
+    def test_func(self):
+        return self.request.user.is_superuser  # Seul l'admin peut poster
+
+    def handle_no_permission(self):
+        return redirect('home')  # Redirige les non-admins vers l'accueil
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user  # Ajoute l'utilisateur connecté
+        return super().form_valid(form)
+
+
+
+# @login_required
+# def add_post(request):
+#     if request.method == "POST":
+#         form = PostForm(request.POST)
+#         if form.is_valid():
+#             post = form.save(commit=False)  # Ne pas encore enregistrer
+#             post.author = request.user  # Ajouter l'auteur
+#             post.save()  # Maintenant, enregistrer
+#             return redirect('home')  # Redirige vers la page d'accueil
+#     else:
+#         form = PostForm()
+#     return render(request, 'app/add_post.html', {'form': form})
+
 
 
 class AddCommentView(CreateView):
     model = Comment
-    # form_class = CommentForm
-    template_name = 'add_comment.html'  
-    # fields = '__all__'
+    template_name = 'add_comment.html'
     fields = ('name', 'body')
-    
+
     def form_valid(self, form):
         form.instance.post_id = self.kwargs['pk']
         return super().form_valid(form)
-    
-    success_url = reverse_lazy('home')
+
+    def get_success_url(self):
+        return reverse('article_detail', kwargs={'pk': self.kwargs['pk']})  
+
 
 
 class AddCategoryView(CreateView):
@@ -120,14 +198,19 @@ class AddCategoryView(CreateView):
     fields = '__all__'
     # fields = ('title', 'body')
     
-class UpdatePostView(UpdateView):
+class UpdatePostView(UserPassesTestMixin, UpdateView):
     model = Post
     form_class = EditForm
     template_name = 'update_post.html'
     # fields = ['title', 'title_tag', 'body']
     
-class DeletePostView(DeleteView):
+    def test_func(self):
+        return self.request.user.is_superuser
+    
+class DeletePostView(UserPassesTestMixin, DeleteView):
     model = Post
     template_name = 'delete_post.html'
     success_url = reverse_lazy('home')
     
+    def test_func(self):
+        return self.request.user.is_superuser
