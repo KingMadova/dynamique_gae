@@ -1,3 +1,68 @@
+<section id="latest-posts" class="latest-posts section">
+  <!-- Section Title -->
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Publication</h2>
+    <div>
+      <span>Checkez nos</span>
+      <span class="description-title">Dernières publications</span>
+    </div>
+  </div>
+  <!-- End Section Title -->
+
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row gy-4">
+      {% for post in dernier_post %}
+      <div class="col-lg-4">
+        <article>
+          <div class="post-img">
+            <img src="{{ post.header_image.url }}" alt="" class="img-fluid" />
+          </div>
+
+          <p class="post-category">{{ post.category }}</p>
+
+          <h2 class="title">
+            <a href="{% url 'article_detail' post.pk %}">{{ post.title }}</a>
+          </h2>
+
+          <div class="d-flex align-items-center">
+            {% if post.author.profile.profile_pic %}
+            <img
+              src="{{ post.author.profile.profile_pic.url }}"
+              class="img-fluid post-author-img flex-shrink-0"
+              alt="profile_pic"
+            />
+            {% else %}
+            <img
+              src="{% static 'app/images/default_profile.png' %}"
+              class="img-fluid post-author-img flex-shrink-0"
+              alt="default_pic_profile"
+            />
+            {% endif %}
+            <div class="post-meta">
+              <p class="post-author">
+                <span class="author-name">
+                  {{post.author.first_name }} {{ post.author.last_name }} -
+                  {{post.post_date}} {% if user.is_authenticated %} 
+                  {% if user.id == post.author.id %}
+                  <!-- <a href="{% url 'update_post' post.pk %}">(Edit)</a> -->
+                  <a href="{% url 'delete_post' post.pk %}">(Delete)</a>
+                  {% endif %} {% endif %}</span
+                >
+              </p>
+              <p class="post-date">
+                <time datetime="2022-01-01">{{post.post_date}}</time>
+              </p>
+            </div>
+          </div>
+        </article>
+      </div>
+      <!-- End post list item -->
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
 <!-- SEARCH -->
 <div class="container mt-4">
   <h2>Résultats de recherche pour : "{{ query }}"</h2>

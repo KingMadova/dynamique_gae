@@ -2,6 +2,105 @@
 <!-- HOME -->
 <main class="main">
   <!-- Blog Hero Section -->
+
+   <!-- Call To Action Section -->
+  <!-- Call To Action 2 Section -->
+  <section id="call-to-action-2" class="call-to-action-2 section">
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div
+        class="advertise-1 d-flex flex-column flex-lg-row gap-4 align-items-center position-relative"
+      >
+        <div
+          class="content-left flex-grow-1"
+          data-aos="fade-right"
+          data-aos-delay="200"
+        >
+          <span class="badge text-uppercase mb-2">Mr. Digne Tsalissan Okombi</span>
+          <h2>Génération Auto-Entrepreneurs</h2>
+          <p class="my-4">
+            Nous offrons un espace d’échange, de partage et d’accompagnement pour vous aider à relever les défis du monde des affaires au CongoNous croyons fermement que l'entrepreneuriat est un moteur de développement personnel, social et économique. En donnant aux jeunes les outils, les compétences et les ressources nécessaires, nous contribuons à façonner une génération de leaders visionnaires, capables d'innover, de créer de la valeur et de relever les défis de demain.
+          </p>
+
+          <div class="features d-flex flex-wrap gap-3 mb-4">
+            <div class="feature-item">
+              <i class="bi bi-check-circle-fill"></i>
+              <span>Accompagnement</span>
+            </div>
+            <div class="feature-item">
+              <i class="bi bi-check-circle-fill"></i>
+              <span>Réseautage</span>
+            </div>
+            <div class="feature-item">
+              <i class="bi bi-check-circle-fill"></i>
+              <span>Formations</span>
+            </div>
+          </div>
+
+          <div class="cta-buttons d-flex flex-wrap gap-3">
+            <a href="{% url 'contact' %}" class="btn btn-primary"
+              >Contactez-Nous</a
+            >
+            <a href="{% url 'about' %}" class="btn btn-outline"
+              >A propos de nous</a
+            >
+          </div>
+        </div>
+
+        <div 
+        class="content-right position-relative"
+        data-aos="fade-right"
+        data-aos-delay="300"
+    >
+        <img
+            src="{% static 'assets/img/cta/OKOMBI.png' %}"
+            alt="Digital Platform"
+            class="img-fluid rounded-4"
+        />
+    
+        <div class="floating-cards">            
+          <div class="floating-card float-left">
+                <div class="card-icon">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+                <div class="card-content">
+                    <span class="stats-number">+1000</span>
+                    <span class="stats-text">Jeunes <br> Accompagnés</span>
+                </div>
+            </div>
+    
+            <div class="floating-card float-top">
+                <div class="card-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+                <div class="card-content">
+                    <span class="stats-number">+500</span>
+                    <span class="stats-text">Entrepreneurs <br> Formés</span>
+                </div>
+            </div>
+    
+            <div class="floating-card float-right">
+                <div class="card-icon">
+                    <i class="bi bi-award"></i>
+                </div>
+                <div class="card-content">
+                    <span class="stats-number">+200</span>
+                    <span class="stats-text">Projets <br> Lancés</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+        <div class="decoration">
+          <div class="circle-1"></div>
+          <div class="circle-2"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- /Call To Action 2 Section -->
+
+
   <section id="blog-hero" class="blog-hero section">
     <div class="container" data-aos="fade-up" data-aos-delay="100">
       <div class="blog-grid">
@@ -246,7 +345,7 @@
    </div>
 
   <!-- SLIDER SECTION -->
-  <div class="containar">
+  <div class="containar" data-aos="fade-down" data-aos-delay="100">
     <div class="slider" style="--width: 100px; --height: 50px; --quantity: 14">
       <div class="list">
         <div class="item" style="--position: 1">
@@ -409,69 +508,7 @@
   <!-- /Call To Action 2 Section -->
 
   <!-- Latest Posts Section -->
-  <section id="latest-posts" class="latest-posts section">
-    <!-- Section Title -->
-    <div class="container section-title" data-aos="fade-up">
-      <h2>Publication</h2>
-      <div>
-        <span>Checkez nos</span>
-        <span class="description-title">Dernières publications</span>
-      </div>
-    </div>
-    <!-- End Section Title -->
 
-    <div class="container" data-aos="fade-up" data-aos-delay="100">
-      <div class="row gy-4">
-        {% for post in dernier_post %}
-        <div class="col-lg-4">
-          <article>
-            <div class="post-img">
-              <img src="{{ post.header_image.url }}" alt="" class="img-fluid" />
-            </div>
-
-            <p class="post-category">{{ post.category }}</p>
-
-            <h2 class="title">
-              <a href="{% url 'article_detail' post.pk %}">{{ post.title }}</a>
-            </h2>
-
-            <div class="d-flex align-items-center">
-              {% if post.author.profile.profile_pic %}
-              <img
-                src="{{ post.author.profile.profile_pic.url }}"
-                class="img-fluid post-author-img flex-shrink-0"
-                alt="profile_pic"
-              />
-              {% else %}
-              <img
-                src="{% static 'app/images/default_profile.png' %}"
-                class="img-fluid post-author-img flex-shrink-0"
-                alt="default_pic_profile"
-              />
-              {% endif %}
-              <div class="post-meta">
-                <p class="post-author">
-                  <span class="author-name">
-                    {{post.author.first_name }} {{ post.author.last_name }} -
-                    {{post.post_date}} {% if user.is_authenticated %} 
-                    {% if user.id == post.author.id %}
-                    <!-- <a href="{% url 'update_post' post.pk %}">(Edit)</a> -->
-                    <a href="{% url 'delete_post' post.pk %}">(Delete)</a>
-                    {% endif %} {% endif %}</span
-                  >
-                </p>
-                <p class="post-date">
-                  <time datetime="2022-01-01">{{post.post_date}}</time>
-                </p>
-              </div>
-            </div>
-          </article>
-        </div>
-        <!-- End post list item -->
-        {% endfor %}
-      </div>
-    </div>
-  </section>
   <!-- /Latest Posts Section -->
 
   <!-- Call To Action Section -->
@@ -486,7 +523,7 @@
               localité. Du Nord au Sud en passant par le Centre et de l'Est à
               l'Ouest, Nous sommes là pour vous!
             </p>
-            <!-- <form
+            <form
               action="forms/newsletter.php"
               method="post"
               class="php-email-form cta-form"
@@ -514,14 +551,9 @@
               <div class="sent-message">
                 Your subscription request has been sent. Thank you!
               </div>
-            </form> -->
-          
-           <div class="cta-buttons d-flex flex-wrap gap-3 text-center">
-            <a href="{% url 'contact' %}" class="btn btn-primary"
-              >S'abonner</a
-            >
-          </div>
-          </div>
+            </form>
+
+         </div>
         </div>
         <div class="col-lg-6">
           <div class="cta-image" data-aos="zoom-out" data-aos-delay="200">
